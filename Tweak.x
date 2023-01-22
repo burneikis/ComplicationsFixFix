@@ -9,9 +9,11 @@
 - (void)setFrame:(CGRect)frame {
 	%orig;
 
+	// Get the y offset from the preferences of the original tweak
 	NSDictionary *defaults = [[NSUserDefaults standardUserDefaults] persistentDomainForName:@"com.bengiannis.complicationsprefs"];
 	NSNumber *yOffset = [defaults objectForKey:@"yOffset"];
 
+	// Get the height of the sibling UIStackView
 	UIStackView *stackView = nil;
 	CGFloat height = 0;
 	for (UIView *view in self.superview.subviews) {
@@ -20,13 +22,11 @@
 			break;
 		}
 	}
-
 	height = stackView.frame.size.height - 50;
 
-	CGFloat complicationCenterHeight = -45 + [yOffset floatValue] - height;
-
-	// Change complication center height to accomodate the new height
-	self.center = CGPointMake(self.center.x, complicationCenterHeight);
+	// Change the y position of the complication view center
+	CGFloat complicationCenterY = -45 + [yOffset floatValue] - height;
+	self.center = CGPointMake(self.center.x, complicationCenterY);
 }
 
 %end
