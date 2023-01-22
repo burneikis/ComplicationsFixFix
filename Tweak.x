@@ -6,12 +6,16 @@
 
 %hook ComplicationsView
 
+static NSNumber *yOffset = nil;
+
 - (void)setFrame:(CGRect)frame {
 	%orig;
 
-	// Get the y offset from the preferences of the original tweak
-	NSDictionary *defaults = [[NSUserDefaults standardUserDefaults] persistentDomainForName:@"com.bengiannis.complicationsprefs"];
-	NSNumber *yOffset = [defaults objectForKey:@"yOffset"];
+	// the first time this method is called we need to get the y offset from the original preferences
+	if (yOffset == nil) {
+		NSDictionary *defaults = [[NSUserDefaults standardUserDefaults] persistentDomainForName:@"com.bengiannis.complicationsprefs"];
+		yOffset = [defaults objectForKey:@"yOffset"] ?: @0;
+	}
 
 	// Get the height of the sibling UIStackView
 	UIStackView *stackView = nil;
